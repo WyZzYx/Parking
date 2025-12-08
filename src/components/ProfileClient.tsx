@@ -8,10 +8,12 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { Session } from "next-auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function ProfileClient({ session: initialSession }: { session: Session | null }) {
   const { toast } = useToast();
-  const { data: session, status, update } = useSession();
+  const router = useRouter();
+  const { data: session, status } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState(initialSession?.user?.name || "");
@@ -40,6 +42,7 @@ export default function ProfileClient({ session: initialSession }: { session: Se
         toast({
           title: "Signed in successfully!",
         });
+        router.refresh();
       }
     } catch (error) {
       toast({
@@ -62,7 +65,7 @@ export default function ProfileClient({ session: initialSession }: { session: Se
       const result = await response.json();
       if (!response.ok) throw new Error(result.message);
       
-      await update({ name, carPlate });
+      router.refresh();
 
       toast({
         title: "Profile updated successfully!",
@@ -132,7 +135,9 @@ export default function ProfileClient({ session: initialSession }: { session: Se
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold">Profile</h2>
-        <p className="text-muted-foreground">Role: {activeSession.user.role}</p>
+        <p className="text-sm text-muted-foreground">
+          Your role: {activeSession.user?.role}
+        </p>
       </div>
       <div className="space-y-4">
         <div>
@@ -162,6 +167,13 @@ export default function ProfileClient({ session: initialSession }: { session: Se
           Sign Out
         </Button>
       </div>
+      {activeSession.user?.role === 'ADMIN' && (
+        <div className="mt-4">
+          <Link href="/admin" passHref>
+            <Button className="w-full" variant="secondary">Admin Panel</Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

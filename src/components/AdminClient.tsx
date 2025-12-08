@@ -8,8 +8,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
- } from "@/components/ui/table";
+} from "@/components/ui/table";
 import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { formatDateWithSeconds } from "@/lib/utils";
 
 type SortBy = "startTime" | "endTime" | "plate";
@@ -57,13 +63,34 @@ export default function AdminClient() {
     }
   };
 
+  const sortLabels: Record<SortBy, string> = {
+    startTime: "Start Time",
+    endTime: "End Time",
+    plate: "Plate",
+  };
+
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Admin Dashboard: All Tickets</h2>
-      <div className="flex gap-2">
-        <Button onClick={() => handleSort("startTime")} variant={sortBy === 'startTime' ? 'default' : 'outline'}>Sort by Start Time</Button>
-        <Button onClick={() => handleSort("endTime")} variant={sortBy === 'endTime' ? 'default' : 'outline'}>Sort by End Time</Button>
-        <Button onClick={() => handleSort("plate")} variant={sortBy === 'plate' ? 'default' : 'outline'}>Sort by Plate</Button>
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-semibold">Admin Dashboard: All Tickets</h2>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm">
+              Sort by: {sortLabels[sortBy]} ({sortDirection.toUpperCase()})
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => handleSort("startTime")}>
+              Sort by Start Time
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleSort("endTime")}>
+              Sort by End Time
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleSort("plate")}>
+              Sort by Plate
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       {loading ? (
         <p>Loading...</p>

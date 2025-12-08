@@ -17,6 +17,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
@@ -46,17 +47,34 @@ export default function RegisterForm() {
     try {
       const response = await axios.post("/api/auth/register", data);
       if (response.status === 201) {
-        toast({
-          title: "Success",
-          description: "You have successfully registered.",
+        const signInResponse = await signIn("credentials", {
+          email: data.email,
+          password: data.password,
+          redirect: false,
         });
-        router.push("/sign-in");
+
+        if (signInResponse?.ok) {
+          toast({
+            title: "Success",
+            description: "Registered and logged in successfully.",
+          });
+          router.push("/profile");
+          router.refresh();
+        } else {
+          toast({
+            title: "Registration successful",
+            description: "Could not log you in. Please sign in manually.",
+            variant: "destructive",
+          });
+          router.push("/sign-in");
+        }
       }
     } catch (error: any) {
       toast({
         title: "Error",
         description:
-          error.response?.data?.message || "An error occurred during registration.",
+          error.response?.data?.message ||
+          "An error occurred during registration.",
         variant: "destructive",
       });
     } finally {
