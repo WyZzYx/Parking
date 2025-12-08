@@ -52,6 +52,8 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        'gradient-teal-start': '#14b8a6',
+        'gradient-blue-end': '#3b82f6',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -73,10 +75,7 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       backgroundImage: {
-        'gradient-accent': 'linear-gradient(to right, var(--tw-gradient-stops))',
-      },
-      gradientColorStops: {
-        'teal-blue': ['#14b8a6', '#3b82f6'],
+        'gradient-accent': "linear-gradient(to right, theme('colors.gradient-teal-start'), theme('colors.gradient-blue-end'))",
       },
     },
   },
