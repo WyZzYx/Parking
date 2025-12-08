@@ -135,9 +135,6 @@ export default function ProfileClient({ session: initialSession }: { session: Se
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold">Profile</h2>
-        <p className="text-sm text-muted-foreground">
-          Your role: {activeSession.user?.role}
-        </p>
       </div>
       <div className="space-y-4">
         <div>
