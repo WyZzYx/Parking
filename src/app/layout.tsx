@@ -5,7 +5,8 @@ import BottomNav from "@/components/BottomNav";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { Providers } from "@/components/Providers";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -34,6 +35,7 @@ export default async function RootLayout({
           </main>
         </Providers>
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
